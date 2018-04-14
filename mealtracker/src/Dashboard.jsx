@@ -32,14 +32,9 @@ class Dashboard extends Component {
       <div>
 
         <Container>
-        <Row>
-            <Col lg={3} md={6} sm={12}>.col</Col>
-            <Col lg={3} md={6} sm={12}>.col</Col>
-            <Col lg={3} md={6} sm={12}>.col</Col>
-            <Col lg={3} md={6} sm={12}>.col</Col>
-        </Row>
+
           <Row>
-            <Col>
+            <Col lg={3} md={6} sm={12}>
               <DatePicker
                 value={this.state.date}
                 onChange={this.changeDate}
@@ -47,7 +42,7 @@ class Dashboard extends Component {
                 mode="landscape"
               />
             </Col>
-            <Col>
+            <Col lg={3} md={6} sm={12}>
               <RaisedButton> Add New Meal </RaisedButton>
             </Col>
 
