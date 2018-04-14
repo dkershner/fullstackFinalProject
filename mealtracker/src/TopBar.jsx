@@ -17,8 +17,8 @@ const Logged = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <MenuItem primaryText="Refresh" />
-    <MenuItem primaryText="Help" />
+    <MenuItem primaryText="Dashboard" />
+    <MenuItem primaryText="History" />
     <MenuItem primaryText="Sign out" />
   </IconMenu>
 );
@@ -30,14 +30,12 @@ class TopBar extends Component {
       this.dropDown=this.dropDown.bind(this)
     }
     dropDown(e, obj) {
-
+      console.log("In dropDown")
     }
   render() {
-
     return (
        <AppBar title="Mealest" iconElementLeft={<Logged />} onLeftButtonClick={this.dropDown}/>
 
-      //<AppBar title="Mealest" iconElementRight={<ToolbarGroup>{myTabs}</ToolbarGroup>}/>
     );
   }
 }
