@@ -13,7 +13,12 @@
   padding: 20px;
   color: white;
 }
-
+#mealsForLabel{
+   text-align:left;
+}
+div < label {
+  text-align:left !important;
+}
 
 .App-title {
   font-size: 1.5em;

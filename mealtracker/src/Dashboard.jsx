@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import { SelectField, MenuItem, RaisedButton, FlatButton, AppBar } from 'material-ui';
 import DatePicker from 'material-ui/DatePicker';
-import {Container, Row, Col} from 'reactstrap';
+import {Label, Container, Row, Col} from 'reactstrap';
+import './App.css';
 
 
 
@@ -34,15 +35,18 @@ class Dashboard extends Component {
         <Container>
 
           <Row>
-            <Col lg={3} md={6} sm={12}>
+            <Col id="mealsForLabel" lg={3} md={4} sm={4} xs={3}>
+              <Label >Meals for:</Label>
               <DatePicker
+
                 value={this.state.date}
                 onChange={this.changeDate}
                 defaultDate={this.getDate()}
                 mode="landscape"
               />
             </Col>
-            <Col lg={3} md={6} sm={12}>
+            <Col lg={3} md={3} sm={3} xs={3}>
+              <br/>
               <RaisedButton> Add New Meal </RaisedButton>
             </Col>
 
