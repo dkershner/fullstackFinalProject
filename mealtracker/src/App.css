@@ -1,6 +1,10 @@
 .App {
   text-align: center;
 }
+#addMeal {
+  padding:2px !important;
+
+}
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;

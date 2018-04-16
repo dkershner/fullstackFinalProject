@@ -8,6 +8,7 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 
+// A table row for the MealList that represents a single meal.
 class Meal extends Component {
   render() {
     return (

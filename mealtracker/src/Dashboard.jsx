@@ -1,93 +1,159 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import { SelectField, MenuItem, RaisedButton, FlatButton, AppBar } from 'material-ui';
+import {TextField, TimePicker, Dialog, SelectField, MenuItem, RadioButton,
+  RadioButtonGroup, RaisedButton, FlatButton, AppBar } from 'material-ui';
 import DatePicker from 'material-ui/DatePicker';
 import {Label, Container, Row, Col} from 'reactstrap';
 import './App.css';
 import MealList from './MealList.jsx';
 import _ from "lodash";
 
-
+// The main page for the user
 class Dashboard extends Component {
   constructor(props){
       super(props)
       this.state={
         date:this.getDate(),
-        meals:{}
+        meals:{},
+        open:false
       }
       this.getDate=this.getDate.bind(this)
       this.changeDate=this.changeDate.bind(this)
       this.mealsForDate=this.mealsForDate.bind(this)
       this.dateString=this.dateString.bind(this)
       }
+    //Get todays date for the default date in the date picker
     getDate() {
       var today = new Date()
       today.setFullYear(today.getFullYear())
       return today
       this.mealsForDate()
     }
+    // This is used when a new date is selected in the date picker.
+    // It calls mealsForDate to fetch all the meals the user has scheduled
+    // on that date.
     changeDate(e, newDate) {
-      this.mealsForDate()
       this.setState({date:newDate})
+      this.mealsForDate()
     }
+
+    // Converts the date to a string in the format that we use for the server.
+    // This will make it easier to fetch for each date.
     dateString(date){
       //Change date to the string server uses
     }
+
+    // Find all the scheduled meals for a given date.
     mealsForDate() {
-    var text = this.dateString(this.state.date)
-    fetch()
-      .then(res => res.json())
-      .then(res => {
-          if(res.result!=="success"){
-            throw Error("Search failed")
+      var text = this.dateString(this.state.date)
+      fetch()
+        .then(res => res.json())
+        .then(res => {
+            if(res.result!=="success"){
+              throw Error("Search failed")
+            }
+            return res.message
+         })
+         .then(data=> {
+           return _(data).map(meal=>{
+             const {Name, Cals, Carbs, Time} = meal
+             return {
+               name: Name,
+               cals: Cals,
+               carbs: Carbs,
+               time: Time
+             }
+           }).sortBy(['time', 'name', 'cals', 'carbs'])
+           .compact().value()
+         })
+         .then(data => {
+           if(data.length != 0) {
+              console.log(data)
+              this.setState({meals:data})
+            }
           }
-          return res.message
-       })
-       .then(data=> {
-         return _(data).map(meal=>{
-           const {Name, Cals, Carbs, Time} = meal
-           return {
-             name: Name,
-             cals: Cals,
-             carbs: Carbs,
-             time: Time
-           }
-         }).sortBy(['time', 'name', 'cals', 'carbs'])
-         .compact().value()
-       })
-       .then(data => {
-         if(data.length != 0) {
-            console.log(data)
-            this.setState({meals:data})
-          }
-        }
-       )
-  }
+         )
+      }
+  //TODO
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  //TODO
+  // When the submit button is hit this function will be used to add the
+  // added meal to the database and table. It also checks to make sure the
+  // meal is valid.
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
+
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        keyboardFocused={true}
+        onClick={this.handleClose}
+      />,
+    ];
     return (
       //Put Chosen days meals here with text fields Tables and buttons
       <div>
         <Container>
           <Row>
-            <Col id="mealsForLabel" lg={3} md={4} sm={4} xs={3}>
-              <Label >Meals for:</Label>
+            <Col lg={3} md={4} sm={4} xs={3}>
+              <Label id="mealsForLabel" >Meals For</Label>
               <DatePicker
-
                 value={this.state.date}
                 onChange={this.changeDate}
                 defaultDate={this.getDate()}
                 mode="landscape"
               />
             </Col>
+            <Col lg={3} md={4} sm={4} xs={3}>
+              <br/>
+              <RaisedButton id="addMeal" label="Add From Meals"></RaisedButton>
+            </Col>
             <Col lg={3} md={3} sm={3} xs={3}>
               <br/>
-              <RaisedButton> Add New Meal </RaisedButton>
+              <RaisedButton label="Add New Meal" onClick={this.handleOpen} />
+                <Dialog
+                  title={"Add Meal for " + this.state.date.toLocaleDateString()}
+                  actions={actions}
+                  modal={false}
+                  open={this.state.open}
+                  onRequestClose={this.handleClose}
+                >
+                <TextField
+                  hintText="Meal Name"
+                  floatingLabelText="Meal Name"
+                />
+                <TextField
+                  hintText="Calories"
+                  floatingLabelText="Calories"
+                />
+                <TextField
+                  hintText="Carbs"
+                  floatingLabelText="Carbs"
+                />
+                <TimePicker
+                  hintText="12hr Format"
+                />
+                </Dialog>
             </Col>
           </Row>
+
           <Row>
             <Col lg={4} md={5} sm={5} xs={5}>
               <MealList meals={this.state.meals}/>
             </Col>
+
           </Row>
         </Container>
       </div>

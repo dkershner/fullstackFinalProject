@@ -11,6 +11,7 @@ import Meal from './Meal.jsx';
 import _ from 'lodash';
 
 
+// Creates a table for all the meals on a given date
 class MealList extends Component {
   buildComps(meals) {
     return _.map(meals, meal => (<Meal key={meal.meal + meal.name} {...meal}/>))

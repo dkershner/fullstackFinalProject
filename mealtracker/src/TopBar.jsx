@@ -7,7 +7,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 
-
+// The nav bar at the top of our site
 const Logged = (props) => (
   <IconMenu
     {...props}
