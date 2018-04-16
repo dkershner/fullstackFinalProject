@@ -4,6 +4,7 @@ import { SelectField, MenuItem, RaisedButton, FlatButton, AppBar } from 'materia
 import DatePicker from 'material-ui/DatePicker';
 import {Label, Container, Row, Col} from 'reactstrap';
 import './App.css';
+import MealList from './MealList.jsx';
 
 
 
@@ -11,7 +12,8 @@ class Dashboard extends Component {
   constructor(props){
       super(props)
       this.state={
-        date:this.getDate()
+        date:this.getDate(),
+        meals:{}
       }
       this.getDate=this.getDate.bind(this)
       this.changeDate=this.changeDate.bind(this)
@@ -49,7 +51,11 @@ class Dashboard extends Component {
               <br/>
               <RaisedButton> Add New Meal </RaisedButton>
             </Col>
-
+          </Row>
+          <Row>
+            <Col lg={4} md={5} sm={5} xs={5}>
+              <MealList meals={this.state.meals}/>
+            </Col>
           </Row>
         </Container>
       </div>
