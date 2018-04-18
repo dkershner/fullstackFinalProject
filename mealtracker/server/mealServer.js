@@ -1,44 +1,89 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 
-//Variables
-var userMeals = {}
-var mealId = 0
+// create db connection
+const mongoose = require('mongoose')
+const fs = require('fs')
+const config = JSON.parse(fs.readFileSync('../config.json'))
+mongoose.connect(config.dburl)
+var db = mongoose.connection
 
-
-app.get('/', (req, res) => res.send('Hello World!'))
-
-//Search for meals
-app.get('/:date',(req,res)=>{
-  if(req.params.date in userMeals){
-    res.json({
-      result:'Success ',
-      meal: userMeals[req.param.date]
-    })
-  }else{
-    res.json({result:'Meal Not Listed'})
-  }
+// The meal schema
+var mealSchema = mongoose.Schema({
+  name: String,
+  date: String,
+  calories: Number,
+  carbs: Number
 })
 
+// bind the schema to the collection in mongodb
+var Meal = mongoose.model('meals', mealSchema)
 
-//Store meals that are given
-app.put('/:date',(req, res) => {
-  userMeals[req.params.date]={number:mealId}
-  mealId+=1
-  res.json({
-    result:'Success',
-    meal: userMeals[req.params.date]
+var cleanDb = false
+
+if (cleanDb === true) {
+  Meal.remove({}, err=>{
+    if(err) consolelog("failed to remove all meals")
+  })
+}
+
+app.use(bodyParser.json())
+
+
+function mealParser(req, res, next) {
+  Meal.find({name: req.params.mealName}, (err, meals)=>{
+    if (err || meals.length === 0) {
+      res.json({result:'meal not found.'})
+    }else{
+      req.meal = meals[0]
+      next()
+    }
+  })
+}
+
+app.get('/:mealName', mealParser)
+app.delete('/:mealName', mealParser)
+
+//Show all meals
+app.get('/', (req, res) => {
+  Meal.find().then(meals => {
+    res.json(meals)
   })
 })
 
-//Delete Meal From database
-app.delete('/:date',(req,res)=>{
-  if(req.params.date in userMeals){
-    delete userMeals[req.params.date]
-    res.json({result:'Success'})
-  }else{
-    res.json({result:'Meal not found'})
-  }
+//Search for meals
+app.get('/:mealName',(req,res)=>{
+    res.json({
+      result:'Success',
+      meal: req.meal
+    })
+})
+
+//Store meals that are given
+app.put('/:mealName',(req, res) => {
+  var meal = Meal({
+    name: req.params.mealName,
+    date: req.params.date,
+    calories: req.params.calories,
+    carbs: req.params.carbs
+  })
+  meal.save()
+
+  res.json({
+    result:'Success',
+    meal: meal
+  })
+})
+
+app.delete('/:mealName',(req,res)=>{
+  Meal.remove({_id:req.meal._id}, err=>{
+    if (err) {
+      res.json({result: "error", message: err})
+    }else{
+      res.json({result:"Success"})
+    }
+  })
 })
 
 
