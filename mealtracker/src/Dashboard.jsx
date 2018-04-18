@@ -16,14 +16,20 @@ class Dashboard extends Component {
         date:this.getDate(),
         meals:{},
         open:false,
-        mealTime:null
+        newMealTime:null,
+        newMealName:null,
+        newMealCals:null,
+        newMealCarbs:null
+
       }
       this.getDate=this.getDate.bind(this)
       this.changeDate=this.changeDate.bind(this)
       this.mealsForDate=this.mealsForDate.bind(this)
       this.dateString=this.dateString.bind(this)
       this.upDateMealTime=this.upDateMealTime.bind(this)
-
+      this.upDateMealName=this.upDateMealName.bind(this)
+      this.upDateMealCals=this.upDateMealCals.bind(this)
+      this.upDateMealCarbs=this.upDateMealCarbs.bind(this)
       }
     //Get todays date for the default date in the date picker
     getDate() {
@@ -78,12 +84,25 @@ class Dashboard extends Component {
          )
       }
   upDateMealTime(e, time) {
-    this.setState({mealTime:time})
+    this.setState({newMealTime:time})
   }
-  //TODO
+  upDateMealCarbs(e, carbs) {
+    this.setState({newMealCarbs:carbs})
+  }
+  upDateMealCals(e, cals) {
+    this.setState({newMealCals:cals})
+  }
+  upDateMealName(e, name) {
+    this.setState({newMealName:name})
+  }
+
   //Clears all values on opening
   handleOpen = () => {
     this.setState({open: true});
+    this.setState({newMealTime:null})
+    this.setState({newMealCarbs:null})
+    this.setState({newMealCals:null})
+    this.setState({newMealName:null})
   };
 
   //TODO
@@ -92,6 +111,7 @@ class Dashboard extends Component {
   // meal is valid.
   handleClose = () => {
     this.setState({open: false});
+    //Add meal to database and table
   };
 
 
@@ -147,18 +167,25 @@ class Dashboard extends Component {
                 <TextField
                   hintText="Meal Name"
                   floatingLabelText="Meal Name"
+                  value={this.state.newMealName}
+                  onChange={this.upDateMealName}
                 />
                 <TextField
                   hintText="Calories"
                   floatingLabelText="Calories"
+                  onChange={this.upDateMealCals}
+                  value={this.state.newMealCals}
                 />
                 <TextField
                   hintText="Carbs"
                   floatingLabelText="Carbs"
+                  value={this.state.newMealCarbs}
+                  onChange={this.upDateMealCarbs}
                 />
                 <TimePicker
                   onChange={this.upDateMealTime}
                   hintText="Time of Meal"
+                  value={this.state.newMealTime}
                 />
                 </Dialog>
             </Col>
