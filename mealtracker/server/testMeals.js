@@ -23,17 +23,23 @@ function cleanup(meal){
   return fetch('http://localhost:3000/'+meal, {method: 'DELETE'})
 }
 
-function createMeal(mealName){
-  return fetch('http://localhost:3000/'+mealName, {method: 'PUT'})
+function createMeal(mealName, params){
+  return fetch('http://localhost:3000/'+mealName, 
+	{
+	  method: 'PUT',
+	  headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(params)
+    })
+      .then(r=>r.json())
 }
 
-createMeal(bagel).then(()=>{
+createMeal(bagel.name, bagel).then(()=>{
 
     getall().then(r => {
       console.log("--All meals--")
       console.log(r)
 
-      cleanup(bagel).then( ()=>{
+      cleanup(bagel.name).then( ()=>{
         console.log("--All Done!--")
 
         // double check!
