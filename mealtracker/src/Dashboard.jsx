@@ -19,7 +19,8 @@ class Dashboard extends Component {
         newMealTime:null,
         newMealName:null,
         newMealCals:null,
-        newMealCarbs:null
+        newMealCarbs:null,
+        alertOpen:false
 
       }
       this.getDate=this.getDate.bind(this)
@@ -30,6 +31,10 @@ class Dashboard extends Component {
       this.upDateMealName=this.upDateMealName.bind(this)
       this.upDateMealCals=this.upDateMealCals.bind(this)
       this.upDateMealCarbs=this.upDateMealCarbs.bind(this)
+      this.handleOpen=this.handleOpen.bind(this)
+      this.handleClose=this.handleClose.bind(this)
+      this.handleAlertClose=this.handleAlertClose.bind(this)
+      this.handleCancel=this.handleCancel.bind(this)
       }
     //Get todays date for the default date in the date picker
     getDate() {
@@ -96,6 +101,7 @@ class Dashboard extends Component {
     this.setState({newMealName:name})
   }
 
+  //TODO: Maybe if you were to try to submit a
   //Clears all values on opening
   handleOpen = () => {
     this.setState({open: true});
@@ -110,9 +116,28 @@ class Dashboard extends Component {
   // added meal to the database and table. It also checks to make sure the
   // meal is valid.
   handleClose = () => {
-    this.setState({open: false});
-    //Add meal to database and table
+
+    if(this.state.newMealTime==null ||
+      this.state.newMealCarbs==null ||
+      this.state.newMealCals==null ||
+      this.state.newMealName==null) {
+      this.setState({alertOpen:true})
+    }
+    else {
+      this.setState({open: false});
+          //Add meal to database and table
+    }
+
+
   };
+  handleAlertClose = () => {
+    this.setState({alertOpen: false});
+    //Add meal to database and table
+
+  };
+  handleCancel = () => {
+    this.setState({open: false});
+  }
 
 
   render() {
@@ -120,7 +145,7 @@ class Dashboard extends Component {
       <FlatButton
         label="Cancel"
         primary={true}
-        onClick={this.handleClose}
+        onClick={this.handleCancel}
       />,
       <FlatButton
         label="Submit"
@@ -129,6 +154,13 @@ class Dashboard extends Component {
         onClick={this.handleClose}
       />,
     ];
+    const alert_actions = [
+      <FlatButton
+        label="Ok"
+        primary={true}
+        onClick={this.handleAlertClose}
+      />
+    ];
     return (
       //Put Chosen days meals here with text fields Tables and buttons
       <div>
@@ -136,6 +168,7 @@ class Dashboard extends Component {
           <Row>
             <Col lg={3} md={4} sm={4} xs={3}>
               <Label id="mealsForLabel" >Meals For</Label>
+              {/* A field with a pop up calandar to pick a date */}
               <DatePicker
                 value={this.state.date}
                 onChange={this.changeDate}
@@ -148,37 +181,42 @@ class Dashboard extends Component {
                 mode="landscape"
               />
             </Col>
+            {/*
             <Col lg={3} md={4} sm={4} xs={3}>
               <br/>
               <RaisedButton id="addMeal" label="From Meals"></RaisedButton>
             </Col>
+            */}
 
-            {/* */}
+
             <Col lg={3} md={3} sm={3} xs={3}>
               <br/>
               <RaisedButton id="addMeal2" label="New Meal" onClick={this.handleOpen} />
+                {/* A pop up dialog contaier that has textfields and a time picker
+                  to give information about the meal they are adding to the date
+                 */}
                 <Dialog
                   title={"Add Meal for " + this.state.date.toLocaleDateString()}
                   actions={actions}
                   modal={false}
                   open={this.state.open}
-                  onRequestClose={this.handleClose}
+                  onRequestClose={this.handleCancel}
                 >
                 <TextField
-                  hintText="Meal Name"
+                  hintText="Ex: Pizza"
                   floatingLabelText="Meal Name"
                   value={this.state.newMealName}
                   onChange={this.upDateMealName}
                 />
                 <TextField
-                  hintText="Calories"
+                  hintText="Ex: 98"
                   floatingLabelText="Calories"
                   onChange={this.upDateMealCals}
                   value={this.state.newMealCals}
                 />
                 <TextField
-                  hintText="Carbs"
-                  floatingLabelText="Carbs"
+                  hintText="Ex: 10"
+                  floatingLabelText="Carbs (g)"
                   value={this.state.newMealCarbs}
                   onChange={this.upDateMealCarbs}
                 />
@@ -187,6 +225,13 @@ class Dashboard extends Component {
                   hintText="Time of Meal"
                   value={this.state.newMealTime}
                 />
+                </Dialog>
+                <Dialog
+                  actions={alert_actions}
+                  modal={false}
+                  open={this.state.alertOpen}
+                >
+                You need to fill out all the fields for your meal. Please try again.
                 </Dialog>
             </Col>
           </Row>
