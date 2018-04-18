@@ -118,8 +118,11 @@ class Dashboard extends Component {
   handleClose = () => {
 
     if(this.state.newMealTime==null ||
+      this.state.newMealCarbs=="" ||
       this.state.newMealCarbs==null ||
+      this.state.newMealCals=="" ||
       this.state.newMealCals==null ||
+      this.state.newMealName=="" ||
       this.state.newMealName==null) {
       this.setState({alertOpen:true})
     }
@@ -230,8 +233,9 @@ class Dashboard extends Component {
                   actions={alert_actions}
                   modal={false}
                   open={this.state.alertOpen}
+                  onRequestClose={this.handleAlertClose}
                 >
-                You need to fill out all the fields for your meal. Please try again.
+                Please fill out all of the fields for your meal.
                 </Dialog>
             </Col>
           </Row>
