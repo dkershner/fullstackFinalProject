@@ -15,12 +15,15 @@ class Dashboard extends Component {
       this.state={
         date:this.getDate(),
         meals:{},
-        open:false
+        open:false,
+        mealTime:null
       }
       this.getDate=this.getDate.bind(this)
       this.changeDate=this.changeDate.bind(this)
       this.mealsForDate=this.mealsForDate.bind(this)
       this.dateString=this.dateString.bind(this)
+      this.upDateMealTime=this.upDateMealTime.bind(this)
+
       }
     //Get todays date for the default date in the date picker
     getDate() {
@@ -74,7 +77,11 @@ class Dashboard extends Component {
           }
          )
       }
+  upDateMealTime(e, time) {
+    this.setState({mealTime:time})
+  }
   //TODO
+  //Clears all values on opening
   handleOpen = () => {
     this.setState({open: true});
   };
@@ -113,16 +120,23 @@ class Dashboard extends Component {
                 value={this.state.date}
                 onChange={this.changeDate}
                 defaultDate={this.getDate()}
+                formatDate={new Intl.DateTimeFormat('en-US', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  }).format}
                 mode="landscape"
               />
             </Col>
             <Col lg={3} md={4} sm={4} xs={3}>
               <br/>
-              <RaisedButton id="addMeal" label="Add From Meals"></RaisedButton>
+              <RaisedButton id="addMeal" label="From Meals"></RaisedButton>
             </Col>
+
+            {/* */}
             <Col lg={3} md={3} sm={3} xs={3}>
               <br/>
-              <RaisedButton label="Add New Meal" onClick={this.handleOpen} />
+              <RaisedButton id="addMeal2" label="New Meal" onClick={this.handleOpen} />
                 <Dialog
                   title={"Add Meal for " + this.state.date.toLocaleDateString()}
                   actions={actions}
@@ -143,14 +157,15 @@ class Dashboard extends Component {
                   floatingLabelText="Carbs"
                 />
                 <TimePicker
-                  hintText="12hr Format"
+                  onChange={this.upDateMealTime}
+                  hintText="Time of Meal"
                 />
                 </Dialog>
             </Col>
           </Row>
-
+          {/* */}
           <Row>
-            <Col lg={4} md={5} sm={5} xs={5}>
+            <Col lg={8} md={8} sm={8} xs={8}>
               <MealList meals={this.state.meals}/>
             </Col>
 
