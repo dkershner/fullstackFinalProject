@@ -2,8 +2,9 @@ const express = require('express')
 const app = express()
 
 //Variables
-var meals = {}
+var userMeals = {}
 var mealId = 0
+
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -11,7 +12,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/:date',(req,res)=>{
   if(req.params.date in userMeals){
     res.json({
-      result:'Success',
+      result:'Success ',
       meal: userMeals[req.param.date]
     })
   }else{
@@ -25,14 +26,15 @@ app.put('/:date',(req, res) => {
   userMeals[req.params.date]={number:mealId}
   mealId+=1
   res.json({
-    result:'success',
+    result:'Success',
     meal: userMeals[req.params.date]
   })
 })
 
+//Delete Meal From database
 app.delete('/:date',(req,res)=>{
-  if(req.params.date in meals){
-    delete meals[req.params.date]
+  if(req.params.date in userMeals){
+    delete userMeals[req.params.date]
     res.json({result:'Success'})
   }else{
     res.json({result:'Meal not found'})
