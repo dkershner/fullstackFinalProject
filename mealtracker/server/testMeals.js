@@ -6,12 +6,17 @@ var pasta = {
 	calories: 15,
 	carbs: 25
 }
-var bagel = 
+var bagel =
 {
 	name: "Bagel",
 	date: "04/20/2017",
 	calories: 20,
 	carbs: 50
+}
+
+var findDate =
+{
+	date: "04-20-2017"
 }
 
 function getall(){
@@ -24,7 +29,7 @@ function cleanup(meal){
 }
 
 function createMeal(mealName, params){
-  return fetch('http://localhost:3000/'+mealName, 
+  return fetch('http://localhost:3000/'+mealName,
 	{
 	  method: 'PUT',
 	  headers: {'Content-Type': 'application/json'},
@@ -33,9 +38,13 @@ function createMeal(mealName, params){
       .then(r=>r.json())
 }
 
+function getMeal(mealDate){
+ return fetch("http://localhost:3000/"+mealDate, {method: 'GET'})
+}
+
 createMeal(bagel.name, bagel).then(()=>{
 
-    getall().then(r => {
+    getMeal("04-20-2017").then(r => {
       console.log("--All meals--")
       console.log(r)
 

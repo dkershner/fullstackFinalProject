@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 
 
 function mealParser(req, res, next) {
-  Meal.find({name: req.params.mealName}, (err, meals)=>{
+  Meal.find({date: req.params.date}, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
     }else{
@@ -42,7 +42,7 @@ function mealParser(req, res, next) {
   })
 }
 
-app.get('/:mealName', mealParser)
+app.get('/:mealDate', mealParser)
 app.delete('/:mealName', mealParser)
 
 //Show all meals
@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
 })
 
 //Search for meals
-app.get('/:mealName',(req,res)=>{
+app.get('/:mealDate',(req,res)=>{
     res.json({
       result:'Success',
       meal: req.meal
@@ -63,7 +63,7 @@ app.get('/:mealName',(req,res)=>{
 //Store meals that are given
 app.put('/:mealName',(req, res) => {
   console.log("Create order for", req)
-  
+
   var meal = Meal({
     name: req.params.mealName,
     date: req.body.date,
