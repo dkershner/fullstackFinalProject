@@ -32,10 +32,11 @@ app.use(bodyParser.json())
 
 
 function mealParser(req, res, next) {
-  Meal.find({date: req.params.date}, (err, meals)=>{
+  Meal.find({ date: req.params.mealDate }, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
     }else{
+      req.meals = meals
       req.meal = meals[0]
       next()
     }
@@ -43,7 +44,7 @@ function mealParser(req, res, next) {
 }
 
 app.get('/:mealDate', mealParser)
-app.delete('/:mealName', mealParser)
+app.delete('/:mealDate', mealParser)
 
 //Show all meals
 app.get('/', (req, res) => {
@@ -52,20 +53,18 @@ app.get('/', (req, res) => {
   })
 })
 
-//Search for meals
+//Search for meals on a given date
 app.get('/:mealDate',(req,res)=>{
     res.json({
       result:'Success',
-      meal: req.meal
+      meals: req.meals
     })
 })
 
 //Store meals that are given
-app.put('/:mealName',(req, res) => {
-  console.log("Create order for", req)
-
+app.put('/:mealDate',(req, res) => {
   var meal = Meal({
-    name: req.params.mealName,
+    name: req.body.mealName,
     date: req.body.date,
     calories: req.body.calories,
     carbs: req.body.carbs
@@ -78,7 +77,7 @@ app.put('/:mealName',(req, res) => {
   })
 })
 
-app.delete('/:mealName',(req,res)=>{
+app.delete('/:mealDate',(req,res)=>{
   Meal.remove({_id:req.meal._id}, err=>{
     if (err) {
       res.json({result: "error", message: err})
