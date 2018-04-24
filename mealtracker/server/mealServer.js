@@ -13,6 +13,7 @@ var db = mongoose.connection
 var mealSchema = mongoose.Schema({
   name: String,
   date: String,
+  time: String,
   calories: Number,
   carbs: Number
 })
@@ -66,6 +67,7 @@ app.put('/:mealDate',(req, res) => {
   var meal = Meal({
     name: req.body.mealName,
     date: req.body.date,
+    time: req.body.time,
     calories: req.body.calories,
     carbs: req.body.carbs
   })
