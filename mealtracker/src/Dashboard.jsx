@@ -54,14 +54,15 @@ class Dashboard extends Component {
     // Converts the date to a string in the format that we use for the server.
     // This will make it easier to fetch for each date.
     dateString(date){
-      //Change date to the string server uses
+      return date.month + '-' + date.day + '-' + date.year
     }
 
     // Find all the scheduled meals for a given date.
     mealsForDate() {
       var text = this.dateString(this.state.date)
-      fetch()
+      fetch("http://localhost:3000/" + text)
         .then(res => res.json())
+<<<<<<< HEAD
         .then(res => {
             if(res.result!=="Success"){
               throw Error("Search failed")
@@ -78,6 +79,10 @@ class Dashboard extends Component {
                time: Time
              }
            }).sortBy(['time', 'name', 'cals', 'carbs'])
+=======
+        .then(r => {
+          r.sortBy(['time', 'name', 'calories', 'carbs'])
+>>>>>>> be6932b481253877604d136744a25b521895c15e
            .compact().value()
          })
          .then(data => {
@@ -85,8 +90,7 @@ class Dashboard extends Component {
               console.log(data)
               this.setState({meals:data})
             }
-          }
-         )
+          })
       }
   upDateMealTime(e, time) {
     this.setState({newMealTime:time})
@@ -128,11 +132,23 @@ class Dashboard extends Component {
     }
     else {
       this.setState({open: false});
-          //Add meal to database and table
-    }
+      var newMeal = {
+      	name: this.state.newMealName,
+      	date: this.state.date,
+        time: this.state.newMealTime,
+      	calories: this.state.newMealCals,
+      	carbs: this.state.newMealCarbs
+      }
+      return fetch('http://localhost:3000/test',
+      {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(newMeal)
+      })
+        .then(r=>r.json())
+      }
+    };
 
-
-  };
   handleAlertClose = () => {
     this.setState({alertOpen: false});
     //Add meal to database and table

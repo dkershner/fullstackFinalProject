@@ -13,6 +13,7 @@ var db = mongoose.connection
 var mealSchema = mongoose.Schema({
   name: String,
   date: String,
+  time: String,
   calories: Number,
   carbs: Number
 })
@@ -32,18 +33,19 @@ app.use(bodyParser.json())
 
 
 function mealParser(req, res, next) {
-  Meal.find({name: req.params.mealName}, (err, meals)=>{
+  Meal.find({ date: req.params.mealDate }, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
     }else{
+      req.meals = meals
       req.meal = meals[0]
       next()
     }
   })
 }
 
-app.get('/:mealName', mealParser)
-app.delete('/:mealName', mealParser)
+app.get('/:mealDate', mealParser)
+app.delete('/:mealDate', mealParser)
 
 //Show all meals
 app.get('/', (req, res) => {
@@ -52,21 +54,26 @@ app.get('/', (req, res) => {
   })
 })
 
-//Search for meals
-app.get('/:mealName',(req,res)=>{
+//Search for meals on a given date
+app.get('/:mealDate',(req,res)=>{
     res.json({
       result:'Success',
-      meal: req.meal
+      meals: req.meals
     })
 })
 
 //Store meals that are given
+<<<<<<< HEAD
 app.put('/:mealName',(req, res) => {
   console.log("Create order for", req)
 
+=======
+app.put('/:mealDate',(req, res) => {
+>>>>>>> be6932b481253877604d136744a25b521895c15e
   var meal = Meal({
-    name: req.params.mealName,
+    name: req.body.mealName,
     date: req.body.date,
+    time: req.body.time,
     calories: req.body.calories,
     carbs: req.body.carbs
   })
@@ -78,7 +85,7 @@ app.put('/:mealName',(req, res) => {
   })
 })
 
-app.delete('/:mealName',(req,res)=>{
+app.delete('/:mealDate',(req,res)=>{
   Meal.remove({_id:req.meal._id}, err=>{
     if (err) {
       res.json({result: "error", message: err})

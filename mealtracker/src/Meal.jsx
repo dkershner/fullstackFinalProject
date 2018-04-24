@@ -14,7 +14,7 @@ class Meal extends Component {
     return (
       <TableRow>
         <TableRowColumn>{this.props.name}</TableRowColumn>
-        <TableRowColumn>{this.props.cals}</TableRowColumn>
+        <TableRowColumn>{this.props.calories}</TableRowColumn>
         <TableRowColumn>{this.props.carbs}</TableRowColumn>
         <TableRowColumn>{this.props.time}</TableRowColumn>
       </TableRow>
