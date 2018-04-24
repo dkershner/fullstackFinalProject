@@ -63,7 +63,7 @@ class Dashboard extends Component {
       fetch()
         .then(res => res.json())
         .then(res => {
-            if(res.result!=="success"){
+            if(res.result!=="Success"){
               throw Error("Search failed")
             }
             return res.message
