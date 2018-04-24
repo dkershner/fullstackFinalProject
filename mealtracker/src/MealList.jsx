@@ -34,7 +34,6 @@ class MealList extends Component {
       </Table>
       </div>
 
-
     );
   }
 }
