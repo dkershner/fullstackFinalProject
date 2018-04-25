@@ -62,27 +62,8 @@ class Dashboard extends Component {
       var text = this.dateString(this.state.date)
       fetch("http://localhost:3000/" + text)
         .then(res => res.json())
-<<<<<<< HEAD
-        .then(res => {
-            if(res.result!=="Success"){
-              throw Error("Search failed")
-            }
-            return res.message
-         })
-         .then(data=> {
-           return _(data).map(meal=>{
-             const {Name, Cals, Carbs, Time} = meal
-             return {
-               name: Name,
-               cals: Cals,
-               carbs: Carbs,
-               time: Time
-             }
-           }).sortBy(['time', 'name', 'cals', 'carbs'])
-=======
         .then(r => {
           r.sortBy(['time', 'name', 'calories', 'carbs'])
->>>>>>> be6932b481253877604d136744a25b521895c15e
            .compact().value()
          })
          .then(data => {
