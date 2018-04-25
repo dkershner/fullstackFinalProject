@@ -67,10 +67,7 @@ class Dashboard extends Component {
            .compact().value()
          })
          .then(data => {
-           if(data.length != 0) {
-              console.log(data)
-              this.setState({meals:data})
-            }
+           this.setState({meals:data})
           })
       }
   upDateMealTime(e, time) {
