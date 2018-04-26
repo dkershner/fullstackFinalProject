@@ -41,7 +41,6 @@ class Dashboard extends Component {
       var today = new Date()
       today.setFullYear(today.getFullYear())
       return today
-      this.mealsForDate()
     }
     // This is used when a new date is selected in the date picker.
     // It calls mealsForDate to fetch all the meals the user has scheduled
@@ -54,19 +53,25 @@ class Dashboard extends Component {
     // Converts the date to a string in the format that we use for the server.
     // This will make it easier to fetch for each date.
     dateString(date){
-      return date.month + '-' + date.day + '-' + date.year
+      return date.getMonth() + '-' + date.getDay() + '-' + date.getYear()
     }
 
     // Find all the scheduled meals for a given date.
     mealsForDate() {
+      console.log('State date is: ' + this.state.date)
       var text = this.dateString(this.state.date)
-      fetch("http://localhost:3000/" + text)
-        .then(res => res.json())
-        .then(r => {
-          r.sortBy(['time', 'name', 'calories', 'carbs'])
-           .compact().value()
-         })
+      console.log('About to fetch with date: ' + text)
+      fetch("http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/" + text)
+        .then(res => {
+          console.log(res)
+          return res.json()
+        })
+        // .then(r => {
+        //   _.r.sortBy(['time', 'name', 'calories', 'carbs'])
+        //    .compact().value()
+        //  })
          .then(data => {
+           console.log(data)
            this.setState({meals:data})
           })
       }
@@ -112,18 +117,17 @@ class Dashboard extends Component {
       this.setState({open: false});
       var newMeal = {
       	name: this.state.newMealName,
-      	date: this.state.date,
+      	date: this.dateString(this.state.date),
         time: this.state.newMealTime,
       	calories: this.state.newMealCals,
       	carbs: this.state.newMealCarbs
       }
-      return fetch('http://localhost:3000/test',
+      return fetch('http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/test',
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(newMeal)
       })
-        .then(r=>r.json())
       }
     };
 

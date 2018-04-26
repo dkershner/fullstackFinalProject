@@ -30,7 +30,16 @@ if (cleanDb === true) {
 }
 
 app.use(bodyParser.json())
+app.use(allowCrossDomain)
 
+//CORS middleware
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://ec2-18-217-221-71.us-east-2.compute.amazonaws.com')
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    res.header('Access-Control-Allow-Headers', 'Content-Type')
+
+    next()
+}
 
 function mealParser(req, res, next) {
   Meal.find({ date: req.params.mealDate }, (err, meals)=>{
@@ -63,9 +72,6 @@ app.get('/:mealDate',(req,res)=>{
 })
 
 //Store meals that are given
-app.put('/:mealName',(req, res) => {
-  console.log("Create order for", req)
-
 app.put('/:mealDate',(req, res) => {
 
   var meal = Meal({
