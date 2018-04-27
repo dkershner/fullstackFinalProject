@@ -20,7 +20,7 @@ class MealList extends Component {
     return (
       <div>
       <Table>
-        <TableHeader displaySelectAll={true} adjustForCheckbox={true}>
+        <TableHeader adjustForCheckbox={true}>
           <TableRow>
             <TableHeaderColumn>Meal Name</TableHeaderColumn>
             <TableHeaderColumn>Calories</TableHeaderColumn>
@@ -28,7 +28,7 @@ class MealList extends Component {
             <TableHeaderColumn>Time</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={true}>
+        <TableBody >
           {this.buildComps(this.props.meals)}
         </TableBody>
       </Table>

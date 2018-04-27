@@ -27,6 +27,7 @@ class Dashboard extends Component {
       this.changeDate=this.changeDate.bind(this)
       this.mealsForDate=this.mealsForDate.bind(this)
       this.dateString=this.dateString.bind(this)
+      this.timeString=this.timeString.bind(this)
       this.upDateMealTime=this.upDateMealTime.bind(this)
       this.upDateMealName=this.upDateMealName.bind(this)
       this.upDateMealCals=this.upDateMealCals.bind(this)
@@ -55,6 +56,9 @@ class Dashboard extends Component {
     dateString(date){
       return date.getMonth() + '-' + date.getDay() + '-' + date.getYear()
     }
+    timeString(time) {
+      return time.getHours() + ":" + time.getMinutes()
+    }
 
     // Find all the scheduled meals for a given date.
     mealsForDate() {
@@ -66,10 +70,9 @@ class Dashboard extends Component {
           console.log(res)
           return res.json()
         })
-        // .then(r => {
-        //   _.r.sortBy(['time', 'name', 'calories', 'carbs'])
-        //    .compact().value()
-        //  })
+         .then(r => {
+           _.sortBy(r, ['time'])
+          })
          .then(data => {
            console.log(data)
            this.setState({meals:data})
@@ -121,7 +124,7 @@ class Dashboard extends Component {
       var newMeal = {
       	name: this.state.newMealName,
       	date: this.dateString(this.state.date),
-        time: this.state.newMealTime,
+        time: this.timeString(this.state.newMealTime),
       	calories: this.state.newMealCals,
       	carbs: this.state.newMealCarbs
       }
@@ -243,7 +246,7 @@ class Dashboard extends Component {
           </Row>
           {/* */}
           <Row>
-            <Col lg={8} md={8} sm={8} xs={8}>
+            <Col lg={10} md={10} sm={10} xs={10}>
               <MealList meals={this.state.meals}/>
             </Col>
 
