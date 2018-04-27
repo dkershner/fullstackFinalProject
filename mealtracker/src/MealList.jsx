@@ -14,13 +14,13 @@ import _ from 'lodash';
 // Creates a table for all the meals on a given date
 class MealList extends Component {
   buildComps(meals) {
-    return _.map(meals, meal => (<Meal key={meal.meal + meal.name} {...meal}/>))
+    return _.map(meals.meals, meal => (<Meal key={meal._id} {...meal}/>))
   }
   render() {
     return (
       <div>
       <Table>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+        <TableHeader displaySelectAll={true} adjustForCheckbox={true}>
           <TableRow>
             <TableHeaderColumn>Meal Name</TableHeaderColumn>
             <TableHeaderColumn>Calories</TableHeaderColumn>
@@ -28,7 +28,7 @@ class MealList extends Component {
             <TableHeaderColumn>Time</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        <TableBody displayRowCheckbox={true}>
           {this.buildComps(this.props.meals)}
         </TableBody>
       </Table>
