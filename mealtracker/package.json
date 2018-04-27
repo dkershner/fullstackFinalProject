@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "lodash": "^4.17.5",
+    "lodash.sortby": "^4.7.0",
     "material-ui": "^0.20.0",
     "npm": "^5.8.0",
     "react": "^16.3.1",
