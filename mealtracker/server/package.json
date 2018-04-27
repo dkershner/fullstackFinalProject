@@ -9,9 +9,15 @@
   "author": "John Venditti",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "google-auth-library": "^1.4.0"
+=======
+    "express": "^4.16.3",
+    "mongoose": "^5.0.16",
+    "node": "^9.11.0"
+>>>>>>> master
   }
 }
