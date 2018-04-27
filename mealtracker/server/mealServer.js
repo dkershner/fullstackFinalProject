@@ -63,11 +63,8 @@ app.get('/:mealDate',(req,res)=>{
 })
 
 //Store meals that are given
-app.put('/:mealName',(req, res) => {
-  console.log("Create order for", req)
 
 app.put('/:mealDate',(req, res) => {
-
   var meal = Meal({
     name: req.body.mealName,
     date: req.body.date,
