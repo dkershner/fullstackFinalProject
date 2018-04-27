@@ -5,7 +5,7 @@ const app = express()
 // create db connection
 const mongoose = require('mongoose')
 const fs = require('fs')
-const config = JSON.parse(fs.readFileSync('../config.json'))
+const config = JSON.parse(fs.readFileSync('config.json'))
 mongoose.connect(config.dburl)
 var db = mongoose.connection
 
@@ -30,19 +30,16 @@ if (cleanDb === true) {
 }
 
 app.use(bodyParser.json())
-app.use(allowCrossDomain)
 
-//CORS middleware
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://ec2-18-217-221-71.us-east-2.compute.amazonaws.com')
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-    res.header('Access-Control-Allow-Headers', 'Content-Type')
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Content-Type")
+  res.header("Access-Control-Allow-Methods", "PUT,GET,DELETE")
+  next()
+})
 
-    next()
-}
-
-function mealParser(req, res, next) {
-  Meal.find({ date: req.params.mealDate }, (err, meals)=>{
+function mealParser(req, res, next) {  
+Meal.find({ date: req.params.mealDate }, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
     }else{
@@ -74,12 +71,13 @@ app.get('/:mealDate',(req,res)=>{
 //Store meals that are given
 app.put('/:mealDate',(req, res) => {
   var meal = Meal({
-    name: req.body.mealName,
+    name: req.body.name,
     date: req.body.date,
     time: req.body.time,
     calories: req.body.calories,
     carbs: req.body.carbs
   })
+console.log(meal.date)
   meal.save()
 
   res.json({
