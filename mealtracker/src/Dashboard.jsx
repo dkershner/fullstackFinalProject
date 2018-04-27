@@ -70,6 +70,9 @@ class Dashboard extends Component {
           console.log(res)
           return res.json()
         })
+        .then(r => {
+          retun r.meals
+        })
          .then(r => {
            _.sortBy(r, ['time'])
           })
