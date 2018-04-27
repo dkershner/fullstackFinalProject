@@ -71,7 +71,7 @@ class Dashboard extends Component {
           return res.json()
         })
         .then(r => {
-          retun r.meals
+          return r.meals
         })
          .then(r => {
            _.sortBy(r, ['time'])
