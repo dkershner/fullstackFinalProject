@@ -54,7 +54,7 @@ class Dashboard extends Component {
     // Converts the date to a string in the format that we use for the server.
     // This will make it easier to fetch for each date.
     dateString(date){
-      return date.getMonth() + '-' + date.getDay() + '-' + date.getYear()
+      return date.getMonth() + '-' + date.getUTCDate() + '-' + date.getYear()
     }
     timeString(time) {
       return time.getHours() + ":" + time.getMinutes()
@@ -74,7 +74,7 @@ class Dashboard extends Component {
           return r.meals
         })
          .then(r => {
-           _.sortBy(r, ['time'])
+           return _.sortBy(r, ['time'])
           })
          .then(data => {
            console.log(data)
