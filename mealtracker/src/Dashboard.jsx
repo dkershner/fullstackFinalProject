@@ -104,7 +104,12 @@ class Dashboard extends Component {
   deleteMeals() {
     if (this.state.mealsToDelete.length !== 0) {
       this.state.mealsToDelete.map(meal => {
-        fetch('http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/' + meal.date, {method: 'DELETE'})
+        fetch('http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/test',
+        {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(meal)
+        })
         .then(r => this.mealsForDate())
       })
     }
