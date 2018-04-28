@@ -7,6 +7,10 @@ import {Label, Container, Row, Col} from 'reactstrap';
 import './App.css';
 import MealList from './MealList.jsx';
 import _ from "lodash";
+import { GoogleLogin } from 'react-google-login';
+
+//Signin information
+
 
 
 // The main page for the user
@@ -16,6 +20,7 @@ class Dashboard extends Component {
       this.state={
         date:this.getDate(),
         meals:{},
+        userID:null,
         open:false,
         newMealTime:null,
         newMealName:null,
@@ -154,6 +159,12 @@ class Dashboard extends Component {
 
 
   render() {
+    const responseGoogle = (response) => {
+      console.log(response)
+      var profile = response.googleId;
+      this.userID = profile;
+      console.log(this.userID)
+    }
     const actions = [
       <FlatButton
         label="Cancel"
@@ -260,6 +271,11 @@ class Dashboard extends Component {
             </Col>
 
           </Row>
+          <GoogleLogin
+               clientId="1042868149379-bg9ir7fla3qqpfpl728229jen3l06emg.apps.googleusercontent.com"
+               buttonText="Login"
+               onSuccess={responseGoogle}
+               onFailure={responseGoogle}/>
         </Container>
       </div>
     );
