@@ -8,6 +8,7 @@ import './App.css';
 import MealList from './MealList.jsx';
 import _ from "lodash";
 
+
 // The main page for the user
 class Dashboard extends Component {
   constructor(props){

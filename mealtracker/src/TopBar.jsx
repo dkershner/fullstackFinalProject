@@ -6,6 +6,7 @@ import Menu from 'material-ui/svg-icons/navigation/menu';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
+import { GoogleLogin } from 'react-google-login';
 
 // The nav bar at the top of our site
 const Logged = (props) => (
