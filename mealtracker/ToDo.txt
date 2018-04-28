@@ -1,4 +1,4 @@
 Fix time on meals
 Put front end on AWS
 Google Sign In (then add email to server on meals)
-Perform GET upon page load and upon PUT
+Add Delete button
