@@ -13,7 +13,7 @@ class Meal extends Component {
   render() {
     const {...other } = this.props;
     return (
-      <TableRow {...other}>
+      <TableRow selected={this.props.selected} {...other}>
         {other.children[0]}
         <TableRowColumn>{this.props.name}</TableRowColumn>
         <TableRowColumn>{this.props.calories}</TableRowColumn>
