@@ -20,7 +20,8 @@ class Dashboard extends Component {
         newMealName:null,
         newMealCals:null,
         newMealCarbs:null,
-        alertOpen:false
+        alertOpen:false,
+        shouldDeleteMeals:false
 
       }
       this.getDate=this.getDate.bind(this)
@@ -240,11 +241,15 @@ class Dashboard extends Component {
                 Please fill out all of the fields for your meal.
                 </Dialog>
             </Col>
+            <Col lg={3} md={3} sm={3} xs={3}>
+              <br/>
+              <RaisedButton id="deleteMeal" label="Delete Selected" onClick={() => this.state.shouldDeleteMeals = true} />
+            </Col>
           </Row>
           {/* */}
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
-              <MealList meals={this.state.meals}/>
+              <MealList meals={this.state.meals} shouldDeleteMeals={this.state.shouldDeleteMeals}/>
             </Col>
 
           </Row>
