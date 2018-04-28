@@ -38,7 +38,7 @@ app.all('/*', function(req, res, next) {
   next()
 })
 
-function mealParser(req, res, next) {  
+function mealParser(req, res, next) {
 Meal.find({ date: req.params.mealDate }, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
@@ -77,7 +77,6 @@ app.put('/:mealDate',(req, res) => {
     calories: req.body.calories,
     carbs: req.body.carbs
   })
-console.log(meal.date)
   meal.save()
 
   res.json({

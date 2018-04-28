@@ -20,13 +20,15 @@ class Dashboard extends Component {
         newMealName:null,
         newMealCals:null,
         newMealCarbs:null,
-        alertOpen:false
+        alertOpen:false,
+        shouldDeleteMeals:false
 
       }
       this.getDate=this.getDate.bind(this)
       this.changeDate=this.changeDate.bind(this)
       this.mealsForDate=this.mealsForDate.bind(this)
       this.dateString=this.dateString.bind(this)
+      this.timeString=this.timeString.bind(this)
       this.upDateMealTime=this.upDateMealTime.bind(this)
       this.upDateMealName=this.upDateMealName.bind(this)
       this.upDateMealCals=this.upDateMealCals.bind(this)
@@ -53,7 +55,10 @@ class Dashboard extends Component {
     // Converts the date to a string in the format that we use for the server.
     // This will make it easier to fetch for each date.
     dateString(date){
-      return date.getMonth() + '-' + date.getDay() + '-' + date.getYear()
+      return date.getMonth() + '-' + date.getUTCDate() + '-' + date.getYear()
+    }
+    timeString(time) {
+      return time.getHours() + ":" + time.getMinutes()
     }
 
     // Find all the scheduled meals for a given date.
@@ -66,10 +71,12 @@ class Dashboard extends Component {
           console.log(res)
           return res.json()
         })
-        // .then(r => {
-        //   _.r.sortBy(['time', 'name', 'calories', 'carbs'])
-        //    .compact().value()
-        //  })
+        .then(r => {
+          return r.meals
+        })
+         .then(r => {
+           return _.sortBy(r, ['time'])
+          })
          .then(data => {
            console.log(data)
            this.setState({meals:data})
@@ -121,7 +128,7 @@ class Dashboard extends Component {
       var newMeal = {
       	name: this.state.newMealName,
       	date: this.dateString(this.state.date),
-        time: this.state.newMealTime,
+        time: this.timeString(this.state.newMealTime),
       	calories: this.state.newMealCals,
       	carbs: this.state.newMealCarbs
       }
@@ -240,11 +247,15 @@ class Dashboard extends Component {
                 Please fill out all of the fields for your meal.
                 </Dialog>
             </Col>
+            <Col lg={3} md={3} sm={3} xs={3}>
+              <br/>
+              <RaisedButton id="deleteMeal" label="Delete Selected" onClick={() => this.state.shouldDeleteMeals = true} />
+            </Col>
           </Row>
           {/* */}
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
-              <MealList meals={this.state.meals}/>
+              <MealList meals={this.state.meals} shouldDeleteMeals={this.state.shouldDeleteMeals}/>
             </Col>
 
           </Row>
