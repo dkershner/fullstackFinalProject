@@ -15,7 +15,8 @@ var mealSchema = mongoose.Schema({
   date: String,
   time: String,
   calories: Number,
-  carbs: Number
+  carbs: Number,
+  userID: String
 })
 
 // bind the schema to the collection in mongodb
@@ -38,8 +39,8 @@ app.all('/*', function(req, res, next) {
   next()
 })
 
-function mealParser(req, res, next) {  
-Meal.find({ date: req.params.mealDate }, (err, meals)=>{
+function mealParser(req, res, next) {
+Meal.find({ date: req.params.mealDate, userID: req.params.user}, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
     }else{
@@ -50,7 +51,7 @@ Meal.find({ date: req.params.mealDate }, (err, meals)=>{
   })
 }
 
-app.get('/:mealDate', mealParser)
+app.get('/:mealDate/:user', mealParser)
 
 //Show all meals
 app.get('/', (req, res) => {
@@ -60,7 +61,7 @@ app.get('/', (req, res) => {
 })
 
 //Search for meals on a given date
-app.get('/:mealDate',(req,res)=>{
+app.get('/:mealDate/:user',(req,res)=>{
     res.json({
       result:'Success',
       meals: req.meals
@@ -74,7 +75,8 @@ app.put('/:mealDate',(req, res) => {
     date: req.body.date,
     time: req.body.time,
     calories: req.body.calories,
-    carbs: req.body.carbs
+    carbs: req.body.carbs,
+    userID: req.body.userID
   })
   meal.save()
 
