@@ -13,38 +13,29 @@ import _ from 'lodash';
 
 // Creates a table for all the meals on a given date
 class MealList extends Component {
-  state = {
-    selectedMeals: []
-  }
+  constructor(props){
+      super(props)
+      this.state={
+          selectedRows: []
+      }
 
-  dateString(date){
-    return date.getMonth() + '-' + date.getDay() + '-' + date.getYear()
-  }
-
-  handleRowSelection = (selectedRows) => {
-    this.setState({
-      selectedMeals: selectedRows
-    })
-    console.log("Selected meals: " + this.state.selectedMeals)
-  }
-
-  handleDelete = () => {
-      this.state.selectedMeals.map(meal => {
-        fetch('http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/' + this.dateString(meal.date), {method: 'DELETE'})
-      })
-      this.setState({selectedMeals:[]})
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.props = nextProps
-    if (this.props.shouldDelete === true) {
-      this.handleDelete()
-      this.props.shoudDelete = false
+      this.handleRowSelection=this.handleRowSelection.bind(this)
     }
+
+    dateString(date){
+      return date.getMonth() + '-' + date.getUTCDate() + '-' + date.getYear()
+    }
+
+  handleRowSelection(selected) {
+    this.setState({selectedRows: selected}, () => {this.props.callbackFromParent(selected)})
+  }
+
+  isSelected = (index) => {
+    return this.state.selectedRows.indexOf(index) !== -1;
   }
 
   buildComps(meals) {
-    return _.map(meals, meal => (<Meal key={meal._id} {...meal}/>))
+    return _.map(meals, (meal, i) => (<Meal selected={this.isSelected(i)} key={meal._id} {...meal}/>))
   }
   render() {
     return (
@@ -57,7 +48,7 @@ class MealList extends Component {
             <TableHeaderColumn>Time</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody deselectOnClickaway={false}>
           {this.buildComps(this.props.meals)}
         </TableBody>
       </Table>

@@ -27,7 +27,7 @@ class Dashboard extends Component {
         newMealCals:null,
         newMealCarbs:null,
         alertOpen:false,
-        shouldDeleteMeals:false
+        mealsToDelete: []
 
       }
       this.getDate=this.getDate.bind(this)
@@ -43,6 +43,8 @@ class Dashboard extends Component {
       this.handleClose=this.handleClose.bind(this)
       this.handleAlertClose=this.handleAlertClose.bind(this)
       this.handleCancel=this.handleCancel.bind(this)
+      this.setDeleteMeals=this.setDeleteMeals.bind(this)
+      this.deleteMeals=this.deleteMeals.bind(this)
       }
     //Get todays date for the default date in the date picker
     getDate() {
@@ -54,8 +56,7 @@ class Dashboard extends Component {
     // It calls mealsForDate to fetch all the meals the user has scheduled
     // on that date.
     changeDate(e, newDate) {
-      this.setState({date:newDate})
-      this.mealsForDate()
+      this.setState({date:newDate}, () => this.mealsForDate())
     }
 
     // Converts the date to a string in the format that we use for the server.
@@ -69,12 +70,10 @@ class Dashboard extends Component {
 
     // Find all the scheduled meals for a given date.
     mealsForDate() {
-      console.log('State date is: ' + this.state.date)
       var text = this.dateString(this.state.date)
-      console.log('About to fetch with date: ' + text)
+      console.log("Fetching with date: " + text)
       fetch("http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/" + text)
         .then(res => {
-          console.log(res)
           return res.json()
         })
         .then(r => {
@@ -84,7 +83,6 @@ class Dashboard extends Component {
            return _.sortBy(r, ['time'])
           })
          .then(data => {
-           console.log(data)
            this.setState({meals:data})
           })
       }
@@ -102,6 +100,25 @@ class Dashboard extends Component {
   }
   componentDidMount() {
     this.mealsForDate()
+  }
+
+  setDeleteMeals = (dataFromChild) => {
+    var selectedMeals = dataFromChild.map(index => this.state.meals[index])
+    this.setState({mealsToDelete: selectedMeals})
+  }
+
+  deleteMeals() {
+    if (this.state.mealsToDelete.length !== 0) {
+      this.state.mealsToDelete.map(meal => {
+        fetch('http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/test',
+        {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(meal)
+        })
+        .then(r => this.mealsForDate())
+      })
+    }
   }
 
   //TODO: Maybe if you were to try to submit a
@@ -261,13 +278,13 @@ class Dashboard extends Component {
             </Col>
             <Col lg={3} md={3} sm={3} xs={3}>
               <br/>
-              <RaisedButton id="deleteMeal" label="Delete Selected" onClick={() => this.state.shouldDeleteMeals = true} />
+              <RaisedButton id="deleteMeal" label="Delete Selected" onClick={this.deleteMeals} />
             </Col>
           </Row>
           {/* */}
           <Row>
             <Col lg={8} md={8} sm={8} xs={8}>
-              <MealList meals={this.state.meals} shouldDeleteMeals={this.state.shouldDeleteMeals}/>
+              <MealList meals={this.state.meals} callbackFromParent={this.setDeleteMeals}/>
             </Col>
 
           </Row>
