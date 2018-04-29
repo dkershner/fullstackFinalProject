@@ -181,7 +181,7 @@ class Dashboard extends Component {
     const responseGoogle = (response) => {
       console.log(response)
       var profile = response.googleId;
-      this.setState({this.userID:profile});
+      this.setState({userID:profile});
       console.log(this.userID)
       this.setState({needLogIn:false});
       this.setState({loggedIn:true});
