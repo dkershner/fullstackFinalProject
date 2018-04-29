@@ -66,7 +66,18 @@ class Dashboard extends Component {
       return date.getMonth() + '-' + date.getUTCDate() + '-' + date.getYear()
     }
     timeString(time) {
-      return time.getHours() + ":" + time.getMinutes()
+      if(time.getHours > 9 && time.getMinutes > 9) {
+        return time.getHours() + ":" + time.getMinutes()
+      }
+      else if (time.getHours > 9) {
+        return time.getHours() + ":0" + time.getMinutes()
+      }
+      else if(time.getMinutes > 9) {
+        return "0" + time.getHours() + ":" + time.getMinutes()
+      }
+      else {
+        return "0" + time.getHours() + ":0" + time.getMinutes() 
+      }
     }
 
     // Find all the user's scheduled meals for a given date.
