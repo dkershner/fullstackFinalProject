@@ -2,7 +2,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 
-
 // create db connection
 const mongoose = require('mongoose')
 const fs = require('fs')
@@ -39,7 +38,7 @@ app.all('/*', function(req, res, next) {
   next()
 })
 
-function mealParser(req, res, next) {
+function mealParser(req, res, next) {  
 Meal.find({ date: req.params.mealDate }, (err, meals)=>{
     if (err || meals.length === 0) {
       res.json({result:'meal not found.'})
@@ -52,7 +51,6 @@ Meal.find({ date: req.params.mealDate }, (err, meals)=>{
 }
 
 app.get('/:mealDate', mealParser)
-app.delete('/:mealDate', mealParser)
 
 //Show all meals
 app.get('/', (req, res) => {
@@ -87,7 +85,7 @@ app.put('/:mealDate',(req, res) => {
 })
 
 app.delete('/:mealDate',(req,res)=>{
-  Meal.remove({_id:req.meal._id}, err=>{
+  Meal.remove({_id:req.body._id}, err=>{
     if (err) {
       res.json({result: "error", message: err})
     }else{
