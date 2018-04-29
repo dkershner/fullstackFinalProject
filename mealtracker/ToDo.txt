@@ -1,4 +1,3 @@
 Put front end on AWS
 Figure out presentation
 John populate server with random meals
-Add Comments

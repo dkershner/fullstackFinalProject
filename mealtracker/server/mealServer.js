@@ -24,6 +24,7 @@ var Meal = mongoose.model('meals', mealSchema)
 
 var cleanDb = false
 
+//method to clear out the database
 if (cleanDb === true) {
   Meal.remove({}, err=>{
     if(err) consolelog("failed to remove all meals")
@@ -32,6 +33,7 @@ if (cleanDb === true) {
 
 app.use(bodyParser.json())
 
+//Required for cross domain requests
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Content-Type")
@@ -60,7 +62,7 @@ app.get('/', (req, res) => {
   })
 })
 
-//Search for meals on a given date
+//Search for meals on a given date for the user
 app.get('/:mealDate/:user',(req,res)=>{
     res.json({
       result:'Success',
@@ -68,7 +70,7 @@ app.get('/:mealDate/:user',(req,res)=>{
     })
 })
 
-//Store meals that are given
+//Store meal that is given
 app.put('/:mealDate',(req, res) => {
   var meal = Meal({
     name: req.body.name,
@@ -86,6 +88,7 @@ app.put('/:mealDate',(req, res) => {
   })
 })
 
+//Delete a meal
 app.delete('/:mealDate',(req,res)=>{
   Meal.remove({_id:req.body._id}, err=>{
     if (err) {

@@ -69,7 +69,7 @@ class Dashboard extends Component {
       return time.getHours() + ":" + time.getMinutes()
     }
 
-    // Find all the scheduled meals for a given date.
+    // Find all the user's scheduled meals for a given date.
     mealsForDate() {
       var text = this.dateString(this.state.date) + "/" + this.state.userID;
       console.log("Fetching with date: " + text)
@@ -103,11 +103,13 @@ class Dashboard extends Component {
   //   this.mealsForDate()
   // }
 
+  //Keep a list of which meals are selected to be deleted
   setDeleteMeals = (dataFromChild) => {
     var selectedMeals = dataFromChild.map(index => this.state.meals[index])
     this.setState({mealsToDelete: selectedMeals})
   }
 
+  //Delete the selected meals
   deleteMeals() {
     if (this.state.mealsToDelete.length !== 0) {
       this.state.mealsToDelete.map(meal => {
