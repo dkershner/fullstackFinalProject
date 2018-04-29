@@ -211,6 +211,7 @@ class Dashboard extends Component {
       //Put Chosen days meals here with text fields Tables and buttons
       <div>
         <Dialog
+          title="Sign-in using Google"
           modal={false}
           open={this.state.needLogIn}
           onRequestClose={this.handleAlertClose}
@@ -295,7 +296,7 @@ class Dashboard extends Component {
             </Col>
             <Col lg={3} md={3} sm={3} xs={3}>
               <br/>
-              <RaisedButton id="deleteMeal" label="Delete Selected" onClick={this.deleteMeals} />
+              <RaisedButton id="deleteMeal" label="Delete" onClick={this.deleteMeals} />
             </Col>
           </Row>
           {/* */}
