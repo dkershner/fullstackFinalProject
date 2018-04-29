@@ -1,4 +1,4 @@
-Fix time on meals
 Put front end on AWS
-Google Sign In (then add email to server on meals)
-Add Delete button
+Figure out presentation
+John populate server with random meals
+Add Comments
