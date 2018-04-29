@@ -27,8 +27,9 @@ class Dashboard extends Component {
         newMealCals:null,
         newMealCarbs:null,
         alertOpen:false,
-        mealsToDelete: []
-
+        mealsToDelete: [],
+        loggedIn:false,
+        needLogIn:true
       }
       this.getDate=this.getDate.bind(this)
       this.changeDate=this.changeDate.bind(this)
@@ -70,7 +71,7 @@ class Dashboard extends Component {
 
     // Find all the scheduled meals for a given date.
     mealsForDate() {
-      var text = this.dateString(this.state.date)
+      var text = this.dateString(this.state.date) + "/" + this.state.userID;
       console.log("Fetching with date: " + text)
       fetch("http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/" + text)
         .then(res => {
@@ -98,9 +99,9 @@ class Dashboard extends Component {
   upDateMealName(e, name) {
     this.setState({newMealName:name})
   }
-  componentDidMount() {
-    this.mealsForDate()
-  }
+  // componentDidMount() {
+  //   this.mealsForDate()
+  // }
 
   setDeleteMeals = (dataFromChild) => {
     var selectedMeals = dataFromChild.map(index => this.state.meals[index])
@@ -121,7 +122,7 @@ class Dashboard extends Component {
     }
   }
 
-  //TODO: Maybe if you were to try to submit a
+
   //Clears all values on opening
   handleOpen = () => {
     this.setState({open: true});
@@ -131,7 +132,7 @@ class Dashboard extends Component {
     this.setState({newMealName:null})
   };
 
-  //TODO
+
   // When the submit button is hit this function will be used to add the
   // added meal to the database and table. It also checks to make sure the
   // meal is valid.
@@ -153,7 +154,8 @@ class Dashboard extends Component {
       	date: this.dateString(this.state.date),
         time: this.timeString(this.state.newMealTime),
       	calories: this.state.newMealCals,
-      	carbs: this.state.newMealCarbs
+      	carbs: this.state.newMealCarbs,
+        userID: this.state.userID
       }
       fetch('http://ec2-18-191-0-236.us-east-2.compute.amazonaws.com:3000/test',
       {
@@ -179,8 +181,11 @@ class Dashboard extends Component {
     const responseGoogle = (response) => {
       console.log(response)
       var profile = response.googleId;
-      this.userID = profile;
+      this.setState({this.userID:profile});
       console.log(this.userID)
+      this.setState({needLogIn:false});
+      this.setState({loggedIn:true});
+      this.mealsForDate();
     }
     const actions = [
       <FlatButton
@@ -205,6 +210,18 @@ class Dashboard extends Component {
     return (
       //Put Chosen days meals here with text fields Tables and buttons
       <div>
+        <Dialog
+          modal={false}
+          open={this.state.needLogIn}
+          onRequestClose={this.handleAlertClose}
+        >
+
+        <GoogleLogin
+             clientId="1042868149379-bg9ir7fla3qqpfpl728229jen3l06emg.apps.googleusercontent.com"
+             buttonText="Login"
+             onSuccess={responseGoogle}
+            />
+        </Dialog>
         <Container>
           <Row>
             <Col lg={3} md={4} sm={4} xs={3}>
@@ -288,11 +305,7 @@ class Dashboard extends Component {
             </Col>
 
           </Row>
-          <GoogleLogin
-               clientId="1042868149379-bg9ir7fla3qqpfpl728229jen3l06emg.apps.googleusercontent.com"
-               buttonText="Login"
-               onSuccess={responseGoogle}
-               onFailure={responseGoogle}/>
+
         </Container>
       </div>
     );

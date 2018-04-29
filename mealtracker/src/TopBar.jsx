@@ -21,17 +21,13 @@ const Logged = (props) => (
     <MenuItem primaryText="Dashboard" />
     <MenuItem primaryText="History" />
     <MenuItem primaryText="Sign out" />
-    <GoogleLogin
-         clientId="1042868149379-bg9ir7fla3qqpfpl728229jen3l06emg.apps.googleusercontent.com"
-         buttonText="Login"
-         onSuccess={responseGoogle}
-         onFailure={responseGoogle}/>
+
   </IconMenu>
 );
 
 const responseGoogle = (response) => {
   console.log(response)
-  
+
 }
 
 class TopBar extends Component {
